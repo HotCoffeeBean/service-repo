@@ -1,6 +1,7 @@
 name: Build Services
 
-on: push
+on:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,7 +15,7 @@ jobs:
 
       - name: Install deps
         run: |
-          pip install pytest
+          pip install pytest flask pyjwt
 
       - name: Run tests (optional)
         run: pytest
