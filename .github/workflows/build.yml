@@ -35,8 +35,8 @@ jobs:
           path: dist/
 
       - name: Trigger deploy repo
-        run: |
-          curl -X POST https://api.github.com/repos/HotCoffeeBean/deploy-repo/dispatches \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
-          -d '{"event_type":"build_completed"}'
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          repository: HotCoffeeBean/deploy-repo
+          event-type: build_complete
