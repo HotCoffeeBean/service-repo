@@ -1,0 +1,41 @@
+name: Build Services
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: python:3.11
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install deps
+        run: |
+          pip install pytest
+
+      - name: Run tests (optional)
+        run: pytest
+
+      - name: Prepare artifacts
+        run: |
+          mkdir dist
+          cp -r user_service dist/
+          cp -r survey_service dist/
+          cp -r response_service dist/
+          cp -r aggregator_service dist/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: services
+          path: dist/
+
+      - name: Trigger deploy repo
+        run: |
+          curl -X POST https://api.github.com/repos/HotCoffeeBean/deploy-repo/dispatches \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+          -d '{"event_type":"build_completed"}'
