@@ -39,4 +39,4 @@ jobs:
         with:
           token: ${{ secrets.PAT_TOKEN }}
           repository: HotCoffeeBean/deploy-repo
-          event-type: build_complete
+          event-type: build_completed
